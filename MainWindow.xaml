@@ -411,7 +411,13 @@
                                     <TextBox x:Name="CountdownKeepInput" Width="90" />
                                     <TextBlock Text="0 = 不限，每个文件夹各自保留" Style="{StaticResource Hint}" Margin="10,0,0,0" />
                                 </StackPanel>
-                                <CheckBox x:Name="SkipEarlyMorningCheck" Grid.Row="4" Content="0:00 – 7:59 期间跳过执行" />
+                                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                                    <CheckBox x:Name="SkipWindowCheck" VerticalAlignment="Center" />
+                                    <TextBox x:Name="SkipStartInput" Width="60" Tag="00:00" />
+                                    <TextBlock Text="–" Style="{StaticResource Hint}" Margin="6,0" />
+                                    <TextBox x:Name="SkipEndInput" Width="60" Tag="07:59" />
+                                    <TextBlock Text="期间跳过执行" Style="{StaticResource Hint}" Margin="8,0,0,0" />
+                                </StackPanel>
                                 <StackPanel Grid.Row="5" Orientation="Horizontal" VerticalAlignment="Bottom">
                                     <Button x:Name="StartCountdownButton" Content="启动倒计时" Style="{StaticResource PrimaryButton}" Margin="0,0,8,0" />
                                     <Button x:Name="StopCountdownButton" Content="停止" Style="{StaticResource DangerButton}" />

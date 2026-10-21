@@ -161,11 +161,29 @@ namespace AntoCopy
                 value?.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty);
         }
 
-        public static bool CountdownSkipEarlyMorning
+        /// <summary>倒计时到达时若处于跳过时段则不执行（注册表键沿用旧名以兼容已有设置）。</summary>
+        public static bool CountdownSkipEnabled
         {
             get => Get("CountdownSkipEarlyMorning") == "1";
             set => Set("CountdownSkipEarlyMorning", value ? "1" : "0");
         }
+
+        /// <summary>跳过时段起点 HH:mm（含）。</summary>
+        public static string CountdownSkipStart
+        {
+            get => NormalizeTime(Get("CountdownSkipStart"), "00:00");
+            set => Set("CountdownSkipStart", NormalizeTime(value, "00:00"));
+        }
+
+        /// <summary>跳过时段终点 HH:mm（含该分钟）；早于起点时表示跨越午夜。</summary>
+        public static string CountdownSkipEnd
+        {
+            get => NormalizeTime(Get("CountdownSkipEnd"), "07:59");
+            set => Set("CountdownSkipEnd", NormalizeTime(value, "07:59"));
+        }
+
+        private static string NormalizeTime(string? text, string def) =>
+            SourceRule.TryParseTime(text ?? string.Empty, out TimeSpan time) ? time.ToString(@"hh\:mm") : def;
 
         /// <summary>WiFi 断开时自动关闭显示器（系统保持运行），见 WifiScreenOff。</summary>
         public static bool ScreenOffOnWifiLost
@@ -1279,7 +1297,7 @@ namespace AntoCopy
                 foreach (CountdownJob job in _jobs.Where(job => job.Remaining == 0))
                 {
                     job.Remaining = job.Interval;
-                    AppLogger.Log($"{job.Label}倒计时到达，但当前处于 0:00-7:59 禁止执行时段，本次已跳过。");
+                    AppLogger.Log($"{job.Label}倒计时到达，但当前处于 {AppSettings.CountdownSkipStart}-{AppSettings.CountdownSkipEnd} 禁止执行时段，本次已跳过。");
                 }
 
                 RaiseStateChanged();
@@ -1308,10 +1326,18 @@ namespace AntoCopy
 
         private static bool ShouldSkipCurrentExecution()
         {
-            if (!AppSettings.CountdownSkipEarlyMorning)
+            if (!AppSettings.CountdownSkipEnabled)
                 return false;
 
-            return DateTime.Now.Hour < 8;
+            SourceRule.TryParseTime(AppSettings.CountdownSkipStart, out TimeSpan start);
+            SourceRule.TryParseTime(AppSettings.CountdownSkipEnd, out TimeSpan end);
+            DateTime now = DateTime.Now;
+            TimeSpan current = new(now.Hour, now.Minute, 0);
+
+            // 终点包含整分钟；终点早于起点时跨越午夜（例如 22:00 – 06:59）。
+            return start <= end
+                ? current >= start && current <= end
+                : current >= start || current <= end;
         }
 
         private static void RaiseStateChanged()

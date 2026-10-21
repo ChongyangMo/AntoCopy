@@ -361,7 +361,9 @@ namespace AntoCopy
             ScheduledKeepInput.Text = Math.Min(MaxKeepCopies, AppSettings.ScheduledKeepCopies).ToString();
             CountdownSecondsInput.Text = AppSettings.CountdownSeconds.ToString();
             CountdownKeepInput.Text = Math.Min(MaxKeepCopies, AppSettings.CountdownKeepCopies).ToString();
-            SkipEarlyMorningCheck.IsChecked = AppSettings.CountdownSkipEarlyMorning;
+            SkipWindowCheck.IsChecked = AppSettings.CountdownSkipEnabled;
+            SkipStartInput.Text = AppSettings.CountdownSkipStart;
+            SkipEndInput.Text = AppSettings.CountdownSkipEnd;
             AutoStartCheck.IsChecked = AppSettings.AutoStart;
         }
 
@@ -626,6 +628,12 @@ namespace AntoCopy
                 return false;
             }
 
+            if (!SourceRule.TryParseTime(SkipStartInput.Text, out _) || !SourceRule.TryParseTime(SkipEndInput.Text, out _))
+            {
+                ShowWarning("跳过时段格式错误，请输入 HH:mm，例如 00:00 – 07:59；终点早于起点表示跨越午夜。");
+                return false;
+            }
+
             AppSettings.SourcePaths = sourcePaths;
             AppSettings.PruneSourceRules(sourcePaths);
             AppSettings.DestPath = DestInput.Text.Trim();
@@ -635,7 +643,9 @@ namespace AntoCopy
             AppSettings.ScheduledKeepCopies = scheduledKeep;
             AppSettings.CountdownSeconds = countdownSeconds;
             AppSettings.CountdownKeepCopies = countdownKeep;
-            AppSettings.CountdownSkipEarlyMorning = SkipEarlyMorningCheck.IsChecked == true;
+            AppSettings.CountdownSkipEnabled = SkipWindowCheck.IsChecked == true;
+            AppSettings.CountdownSkipStart = SkipStartInput.Text;
+            AppSettings.CountdownSkipEnd = SkipEndInput.Text;
             AppSettings.AutoStart = AutoStartCheck.IsChecked == true;
 
             ScheduledFolderInput.Text = AppSettings.ScheduledFolderName;
@@ -643,7 +653,9 @@ namespace AntoCopy
             ScheduledKeepInput.Text = AppSettings.ScheduledKeepCopies.ToString();
             CountdownSecondsInput.Text = AppSettings.CountdownSeconds.ToString();
             CountdownKeepInput.Text = AppSettings.CountdownKeepCopies.ToString();
-            SkipEarlyMorningCheck.IsChecked = AppSettings.CountdownSkipEarlyMorning;
+            SkipWindowCheck.IsChecked = AppSettings.CountdownSkipEnabled;
+            SkipStartInput.Text = AppSettings.CountdownSkipStart;
+            SkipEndInput.Text = AppSettings.CountdownSkipEnd;
 
             AppLogger.Log("配置已保存。");
             AppEvents.RaiseSettingsChanged();
