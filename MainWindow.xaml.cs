@@ -83,7 +83,7 @@ namespace AntoCopy
         public MainWindow()
         {
             InitializeComponent();
-            ThemeManager.Attach(this);
+            ThemeManager.Attach(this, "CardBrush"); // 最上面是菜单栏和顶部栏（卡片色）
             Icon = AppIcon.GetImageSource();
             SubtitleText.Text = Subtitle;
             SourceList.ItemsSource = _sources;

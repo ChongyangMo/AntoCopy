@@ -10,9 +10,8 @@
         UseLayoutRounding="True"
         TextOptions.TextFormattingMode="Display">
     <DockPanel>
-        <!-- 菜单栏 -->
-        <Border DockPanel.Dock="Top" Background="{DynamicResource CardBrush}"
-                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1">
+        <!-- 菜单栏：和标题栏、顶部栏同为卡片色且不加分隔线，三者连成一体（标题栏颜色见 ThemeManager.ApplyTitleBar） -->
+        <Border DockPanel.Dock="Top" Background="{DynamicResource CardBrush}">
             <Menu Background="Transparent" Foreground="{DynamicResource TextBrush}" Padding="6,2">
                 <MenuItem x:Name="FileMenu" Header="文件(_F)">
                     <MenuItem x:Name="SaveMenu" Header="保存设置" InputGestureText="Ctrl+S" />

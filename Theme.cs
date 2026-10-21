@@ -1,6 +1,8 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media;
 using Microsoft.Win32;
 
 namespace AntoCopy
@@ -45,9 +47,14 @@ namespace AntoCopy
             };
         }
 
-        /// <summary>窗口句柄创建后按当前主题设置标题栏深浅色。</summary>
-        public static void Attach(Window window)
+        /// <summary>每个窗口的标题栏涂成哪个配色。</summary>
+        private static readonly ConditionalWeakTable<Window, string> CaptionBrushKeys = new();
+
+        /// <summary>窗口句柄创建后按当前主题设置标题栏深浅色和底色。</summary>
+        /// <param name="captionBrushKey">标题栏底色取哪个配色：和窗口最上面一条内容的底色一致，标题栏与内容连成一体、看不出分界</param>
+        public static void Attach(Window window, string captionBrushKey = "PageBrush")
         {
+            CaptionBrushKeys.AddOrUpdate(window, captionBrushKey);
             window.SourceInitialized += (_, _) => ApplyTitleBar(window);
         }
 
@@ -75,7 +82,10 @@ namespace AntoCopy
                 ApplyTitleBar(window);
         }
 
-        /// <summary>Windows 11 / 10 20H1+ 的深色标题栏；窗口句柄创建前调用无效。</summary>
+        /// <summary>
+        /// Windows 11 / 10 20H1+ 的深色标题栏；Windows 11 上再把标题栏涂成内容的底色（Win10 不认这个属性，保持系统色）。
+        /// 窗口句柄创建前调用无效。
+        /// </summary>
         private static void ApplyTitleBar(Window window)
         {
             IntPtr hwnd = new WindowInteropHelper(window).Handle;
@@ -84,6 +94,13 @@ namespace AntoCopy
 
             int dark = IsDark ? 1 : 0;
             NativeMethods.DwmSetWindowAttribute(hwnd, NativeMethods.DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
+
+            if (CaptionBrushKeys.TryGetValue(window, out string? key) && window.TryFindResource(key) is SolidColorBrush caption)
+            {
+                Color c = caption.Color;
+                int colorRef = c.R | c.G << 8 | c.B << 16;
+                NativeMethods.DwmSetWindowAttribute(hwnd, NativeMethods.DWMWA_CAPTION_COLOR, ref colorRef, sizeof(int));
+            }
         }
 
         private static void Refresh(bool notifyAlways)

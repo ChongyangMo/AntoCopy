@@ -372,6 +372,7 @@ namespace AntoCopy
         public static extern bool GetDiskFreeSpaceEx(string directory, out ulong freeBytesAvailable, out ulong totalBytes, out ulong totalFreeBytes);
 
         public const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+        public const int DWMWA_CAPTION_COLOR = 35; // Win11 22000+，值为 COLORREF（0x00BBGGRR）
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
