@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <!-- 界面用 WPF；托盘图标、计时器、对话框沿用 WinForms 组件。两者同名类型较多，关闭隐式 using，各文件显式引用。 -->
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

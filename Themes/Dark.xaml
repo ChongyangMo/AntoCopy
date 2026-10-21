@@ -1,0 +1,39 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- 黑夜模式配色；键名须与 Light.xaml 一一对应 -->
+    <SolidColorBrush x:Key="PageBrush" Color="#111318" />
+    <SolidColorBrush x:Key="CardBrush" Color="#1A1D24" />
+    <SolidColorBrush x:Key="BorderBrush" Color="#2A2F3A" />
+    <SolidColorBrush x:Key="TextBrush" Color="#E5E7EB" />
+    <SolidColorBrush x:Key="MutedBrush" Color="#9CA3AF" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#3B82F6" />
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#2563EB" />
+    <SolidColorBrush x:Key="AccentPressedBrush" Color="#1D4ED8" />
+    <SolidColorBrush x:Key="AccentDisabledBrush" Color="#2B4A80" />
+    <SolidColorBrush x:Key="ControlBorderBrush" Color="#3A404C" />
+    <SolidColorBrush x:Key="ControlBorderHoverBrush" Color="#566070" />
+    <SolidColorBrush x:Key="ButtonHoverBrush" Color="#252933" />
+    <SolidColorBrush x:Key="ButtonPressedBrush" Color="#2E3340" />
+    <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E" />
+    <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#F87171" />
+    <SolidColorBrush x:Key="DangerBorderBrush" Color="#7F1D1D" />
+    <SolidColorBrush x:Key="DangerHoverBrush" Color="#2A1719" />
+    <SolidColorBrush x:Key="SelectBrush" Color="#1E3A5F" />
+    <SolidColorBrush x:Key="RowHoverBrush" Color="#222631" />
+    <SolidColorBrush x:Key="ScrollThumbBrush" Color="#3F4552" />
+    <SolidColorBrush x:Key="ScrollThumbHoverBrush" Color="#566070" />
+
+    <!-- 执行日志 -->
+    <SolidColorBrush x:Key="LogBgBrush" Color="#12141A" />
+    <SolidColorBrush x:Key="LogBorderBrush" Color="#2A2F3A" />
+    <SolidColorBrush x:Key="LogTextBrush" Color="#D1D5DB" />
+    <SolidColorBrush x:Key="LogTimeBrush" Color="#6B7280" />
+    <SolidColorBrush x:Key="LogSelectBrush" Color="#334155" />
+    <SolidColorBrush x:Key="LogErrorBrush" Color="#F87171" />
+    <SolidColorBrush x:Key="LogWarningBrush" Color="#FBBF24" />
+    <SolidColorBrush x:Key="LogSuccessBrush" Color="#4ADE80" />
+
+    <!-- 系统默认模板里用到的颜色（如滚动区右下角的方块） -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#111318" />
+</ResourceDictionary>
