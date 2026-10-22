@@ -192,6 +192,13 @@ namespace AntoCopy
             set => Set("ScreenOffOnWifiLost", value ? "1" : "0");
         }
 
+        /// <summary>WiFi 断开后键鼠空闲满多少秒才息屏，默认 30 秒；0 表示立即息屏。</summary>
+        public static int ScreenOffIdleSeconds
+        {
+            get => int.TryParse(Get("ScreenOffIdleSeconds"), out int seconds) && seconds >= 0 ? seconds : 30;
+            set => Set("ScreenOffIdleSeconds", value.ToString());
+        }
+
         #region 按文件夹的备份频率
 
         private const string LastRunFormat = "yyyy-MM-dd HH:mm:ss";
@@ -1413,8 +1420,9 @@ namespace AntoCopy
             {
                 CheckOnClick = true,
                 Checked = WifiScreenOff.Enabled,
-                ToolTipText = "已连接的 WiFi 断开约 6 秒后关闭显示器；系统不睡眠，备份照常执行，WiFi 恢复后撤销。"
+                ToolTipText = WifiScreenOff.Description + "。"
             };
+            menu.Opening += (_, _) => wifiScreenOffItem.ToolTipText = WifiScreenOff.Description + "。";
             wifiScreenOffItem.CheckedChanged += (_, _) => WifiScreenOff.Enabled = wifiScreenOffItem.Checked;
             WifiScreenOff.EnabledChanged += () => wifiScreenOffItem.Checked = WifiScreenOff.Enabled;
             menu.Items.Add(wifiScreenOffItem);

@@ -302,6 +302,8 @@ namespace AntoCopy
 
             WifiScreenOffMenu.IsChecked = WifiScreenOff.Enabled;
             WifiScreenOffMenu.Click += (_, _) => WifiScreenOff.Enabled = WifiScreenOffMenu.IsChecked;
+            WifiScreenOffMenu.ToolTipOpening += (_, _) => WifiScreenOffMenu.ToolTip = WifiScreenOff.Description;
+            ScreenOffIdleMenu.Click += (_, _) => new ScreenOffIdleWindow { Owner = this }.ShowDialog();
 
             ThemeSystemMenu.Click += (_, _) => ThemeManager.Select(AppTheme.System);
             ThemeLightMenu.Click += (_, _) => ThemeManager.Select(AppTheme.Light);

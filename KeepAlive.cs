@@ -302,11 +302,9 @@ namespace AntoCopy
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         public static extern int RegisterApplicationRestart(string? pwzCommandline, int dwFlags);
 
-        public static readonly IntPtr HWND_BROADCAST = new(0xFFFF);
         public const uint WM_SYSCOMMAND = 0x0112;
         public static readonly IntPtr SC_MONITORPOWER = new(0xF170);
         public static readonly IntPtr MONITOR_OFF = new(2);
-        public const uint SMTO_ABORTIFHUNG = 0x0002;
         public const int WlanInterfaceStateConnected = 1;
 
         public const uint PROGRESS_CONTINUE = 0;
@@ -388,8 +386,7 @@ namespace AntoCopy
         public static extern bool GetLastInputInfo(ref LASTINPUTINFO info);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SendMessageTimeout(
-            IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam, uint flags, uint timeout, out IntPtr result);
+        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("wlanapi.dll")]
         public static extern uint WlanOpenHandle(uint clientVersion, IntPtr reserved, out uint negotiatedVersion, out IntPtr clientHandle);

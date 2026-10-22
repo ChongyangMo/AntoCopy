@@ -34,6 +34,7 @@
                 <MenuItem Header="设置(_S)">
                     <MenuItem x:Name="WifiScreenOffMenu" Header="WiFi 断开时自动息屏" IsCheckable="True"
                               ToolTip="已连接的 WiFi 断开约 6 秒后关闭显示器；系统不睡眠，备份照常执行，WiFi 恢复后撤销" />
+                    <MenuItem x:Name="ScreenOffIdleMenu" Header="息屏前空闲时间…" />
                     <Separator />
                     <MenuItem x:Name="ThemeSystemMenu" Header="主题跟随系统" />
                     <MenuItem x:Name="ThemeLightMenu" Header="白天模式" />
