@@ -1364,6 +1364,7 @@ namespace AntoCopy
         private static bool _closeHintShown;
         private static System.Windows.Application _wpfApp = null!;
         private static MainWindow? _mainWindow;
+        private static bool _showingMainWindow;
 
         [STAThread]
         private static void Main()
@@ -1550,15 +1551,28 @@ namespace AntoCopy
         /// <summary>主窗口整个运行期只创建一次，关闭/最小化只是隐藏到托盘。</summary>
         private static void ShowMainWindow()
         {
-            _mainWindow ??= new MainWindow();
+            // 首次 Show() 期间会处理托盘消息，连点托盘会重入；此时 IsVisible 还是 false，
+            // 再调一次 Show() 会让 WPF 重复建窗口句柄而抛异常。正在显示时直接忽略，外层调用会负责激活。
+            if (_showingMainWindow)
+                return;
 
-            if (!_mainWindow.IsVisible)
-                _mainWindow.Show();
+            _showingMainWindow = true;
+            try
+            {
+                _mainWindow ??= new MainWindow();
 
-            if (_mainWindow.WindowState == System.Windows.WindowState.Minimized)
-                _mainWindow.WindowState = System.Windows.WindowState.Normal;
+                if (!_mainWindow.IsVisible)
+                    _mainWindow.Show();
 
-            _mainWindow.Activate();
+                if (_mainWindow.WindowState == System.Windows.WindowState.Minimized)
+                    _mainWindow.WindowState = System.Windows.WindowState.Normal;
+
+                _mainWindow.Activate();
+            }
+            finally
+            {
+                _showingMainWindow = false;
+            }
         }
     }
 }
